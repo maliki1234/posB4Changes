@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Stock" ADD COLUMN     "ppi" INTEGER NOT NULL DEFAULT 0;

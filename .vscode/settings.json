@@ -1,0 +1,6 @@
+{
+    "WillLuke.nextjs.addTypesOnSave": true,
+    "WillLuke.nextjs.hasPrompted": true,
+    "DockerRun.DisableAutoGenerateConfig": true,
+    "CodeGPT.apiKey": "CodeGPT Plus Beta"
+}

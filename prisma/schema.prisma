@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// We could not retrieve columns for the underlying table. Either it has none or you are missing rights to see them. Please check your privileges.
+
+model Businness {
+  id            Int    @id @default(autoincrement())
+  name          String
+  description   String?
+  expDateInfo   Int    @default(60)
+  productRemain Int    @default(10)
+  user          User[]
+}
+
+model User {
+  id          Int           @id @default(autoincrement())
+  password    String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  role        Role          @default(ADMIN)
+  active      Boolean       @default(false)
+  random      Boolean       @default(false)
+  firstName   String
+  lastName    String
+  phoneNumber Int           @unique
+  Expenditure Expenditure[]
+  Report      Report[]
+  Sales       Sales[]
+  Stock       Stock[]
+  BusinessId  Int
+  Business Businness @relation(fields: [BusinessId], references: [id])
+}
+
+model Category {
+  id      Int       @id @default(autoincrement())
+  name    String    @unique
+  Product Product[]
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  price       Int
+  quantity    Int      @default(0)
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  categoryId  Int
+  state       state    @default(active)
+  barcode     String?   @unique
+  category    Category @relation(fields: [categoryId], references: [id])
+  Report      Report[]
+  Sales       Sales[]
+  Stock       Stock[]
+}
+
+model Sales {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Productid Int
+  UserId    Int
+  Product   Product  @relation(fields: [Productid], references: [id])
+  Saler     User     @relation(fields: [UserId], references: [id])
+}
+
+model Stock {
+  id        Int      @id @default(autoincrement())
+  pPrice    Int
+  quantity  Int      @default(0)
+  remain    Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  UserId    Int
+  expire    DateTime
+  ProductId Int
+  ppi       Int      @default(0)
+  Product   Product  @relation(fields: [ProductId], references: [id])
+  Saler     User     @relation(fields: [UserId], references: [id])
+}
+
+model Report {
+  id         Int      @id @default(autoincrement())
+  ProductId  Int
+  UserId     Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  quantity   Int
+  totalPrice Int
+  price      Int
+  date       String   @default("2023-12-17")
+  time       String   @default("00:00")
+  month      String   @default("1")
+  year       String   @default("2024")
+  ppi        Int      @default(0)
+  profit     Int      @default(0)
+  Product    Product  @relation(fields: [ProductId], references: [id])
+  Saler      User     @relation(fields: [UserId], references: [id])
+}
+
+model frequentAsked {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  times     Int
+}
+
+model Expenditure {
+  id        Int      @id @default(autoincrement())
+  price     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  date      String   @default("2023-12-17")
+  time      String   @default("00:00")
+  month     String   @default("1")
+  year      String   @default("2024")
+  UserId    Int
+  name      String
+  Saler     User     @relation(fields: [UserId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  SUPERVISOR
+  EMPLOYEE
+}
+
+enum state {
+  active
+  freeze
+}
