@@ -12,6 +12,7 @@ import Header from "@/components/header/Header"
 import { Toaster } from "@/components/ui/toaster"
 import { redirect } from "next/navigation"
 import Link from "next/link"
+import { profiles } from "@/lib/link"
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -47,13 +48,13 @@ export default async function RootLayout({
       <Provider>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system">
-        <div className="grid grid-cols-9">
-          <div className="col-span-1">
+        <div className="grid grid-cols-1 md:grid-cols-9">
+          <div className="hidden md:block col-span-1">
            <SideBar />
           </div>
           <div className="col-span-8">
             <div className='relative h-screen'>
-            <Header/>
+            <Header links={profiles}/>
               {children}
               
             </div >
